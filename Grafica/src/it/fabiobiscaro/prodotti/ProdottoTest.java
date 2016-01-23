@@ -15,7 +15,7 @@ public class ProdottoTest {
 		}
 		
 		// Alimentare
-		Alimentare a = new Alimentare("qwe", "banane", 100.0f, new Data(26,1,2016));
+		Alimentare a = new Alimentare("qwe", "banane", 100.0, new Data(26,1,2016));
 		System.out.println(a);
 		a.applicaSconto();
 		System.out.println(a);

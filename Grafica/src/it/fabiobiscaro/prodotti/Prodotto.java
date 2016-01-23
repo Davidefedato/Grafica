@@ -3,9 +3,9 @@ package it.fabiobiscaro.prodotti;
 public class Prodotto implements Cloneable {
 	String codice;//Torresan Pajazzo
 	String descrizione;
-	float prezzo;
+	double prezzo;
 
-	public Prodotto(String codice, String descrizione, float prezzo) {
+	public Prodotto(String codice, String descrizione, double prezzo) {
 		super();
 		this.codice = codice;
 		this.descrizione = descrizione;
@@ -42,16 +42,16 @@ public class Prodotto implements Cloneable {
 		this.descrizione = descrizione;
 	}
 
-	public float getPrezzo() {
+	public double getPrezzo() {
 		return prezzo;
 	}
 
-	public void setPrezzo(float prezzo) {
+	public void setPrezzo(double prezzo) {
 		this.prezzo = prezzo;
 	}
 
 	public void applicaSconto() {
-		this.prezzo = this.prezzo * 0.95f;
+		this.prezzo = this.prezzo * 0.95;
 	}
 
 	@Override

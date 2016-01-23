@@ -4,7 +4,7 @@ public class Alimentare extends Prodotto {
 
 	Data scadenza;
 	
-	public Alimentare(String codice, String descrizione, float prezzo, Data scadenza) {
+	public Alimentare(String codice, String descrizione, double prezzo, Data scadenza) {
 		super(codice, descrizione, prezzo); // Chiama il costruttore della classe estesa
 		this.scadenza = scadenza; // Imposta il nuovo attributo della classe Alimentare
 	}
@@ -25,7 +25,7 @@ public class Alimentare extends Prodotto {
 	public void applicaSconto() {
 		// TODO Auto-generated method stub
 		if (scadenza.getDifference(new Data())<10) {
-			prezzo = prezzo * 0.8f;
+			prezzo = prezzo * 0.8;
 		} else {
 			super.applicaSconto();
 		}
