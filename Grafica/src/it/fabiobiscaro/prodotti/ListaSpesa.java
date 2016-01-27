@@ -1,6 +1,10 @@
 package it.fabiobiscaro.prodotti;
 
-	public class ListaSpesa {
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class ListaSpesa {
 		private Prodotto lista [];
 		private int numProdotti;
 		private int maxProdotti;
@@ -35,6 +39,36 @@ package it.fabiobiscaro.prodotti;
 			totale=totale+lista[i].getPrezzo();
 		}
 		return totale;
+	}
+	public void salva() throws IOException{
+		BufferedWriter writer;
+		writer = new BufferedWriter(new FileWriter("Scontrino.txt"));
+		
+		// Ciclo tutti gli oggetti e li salvi
+		for (int i=0; i<numProdotti; i++){
+			Prodotto p = lista[i];
+			
+			if (p instanceof Alimentare){
+				
+				writer.write("Alimentare");
+				writer.write(p.getDescrizione());
+				writer.write(p.getCodice());
+				writer.write(String.valueOf(p.getPrezzo()));
+				writer.write(((Alimentare) p).getScadenza());
+				
+			}
+			else if(p instanceof NonAlimentare) {
+				
+				writer.write("Non Alimetare");
+				writer.write(p.getDescrizione());
+				writer.write(p.getCodice());
+				//writer.write(p.getPrezzo());
+				writer.write(((NonAlimentare) p).getMateriale());
+			}
+			
+		}
+		
+		// Chiudi il file
 	}
 }
 

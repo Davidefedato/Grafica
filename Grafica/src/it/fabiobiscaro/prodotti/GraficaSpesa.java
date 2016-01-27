@@ -167,6 +167,20 @@ public class GraficaSpesa {
 
 		txtAlimentari = new Text(shlLista, SWT.BORDER);
 		txtAlimentari.setBounds(137, 230, 76, 21);
+		
+		Button btnCaricaScontrino = new Button(shlLista, SWT.NONE);
+		btnCaricaScontrino.setBounds(61, 283, 125, 25);
+		btnCaricaScontrino.setText("Carica scontrino");
+		
+		Button btnSalvaScontrino = new Button(shlLista, SWT.NONE);
+		btnSalvaScontrino.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+			}
+		});
+		btnSalvaScontrino.setBounds(61, 314, 114, 25);
+		btnSalvaScontrino.setText("Salva scontrino");
 
 	}
 }

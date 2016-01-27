@@ -48,4 +48,22 @@ public class Data {
 		return giorno+"/"+mese+"/"+anno;
 	}
 
+	public GregorianCalendar getC() {
+		return c;
+	}
+
+	public int getAnno(){
+		int anno = c.get(Calendar.YEAR);
+		return anno;
+	}
+	public int getMese(){
+		int mese = c.get(Calendar.MONTH) + 1;
+		return mese;
+	}
+	public int getAnno(){
+		int anno = c.get(Calendar.YEAR);
+		return anno;
+	}
+	
+
 }

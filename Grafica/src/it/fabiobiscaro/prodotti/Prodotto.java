@@ -1,7 +1,7 @@
 package it.fabiobiscaro.prodotti;
 
 public class Prodotto implements Cloneable {
-	String codice;//Torresan Pajazzo
+	String codice;
 	String descrizione;
 	double prezzo;
 
@@ -26,7 +26,7 @@ public class Prodotto implements Cloneable {
 	 * @param codice
 	 */
 
-	public void setCodice(String codice) {
+	public void setCodice(final String codice) {
 		this.codice = codice;
 	}
 
