@@ -60,9 +60,9 @@ public class Data {
 		int mese = c.get(Calendar.MONTH) + 1;
 		return mese;
 	}
-	public int getAnno(){
-		int anno = c.get(Calendar.YEAR);
-		return anno;
+	public int getGiorno(){
+		int giorno = c.get(Calendar.DATE);
+		return giorno;
 	}
 	
 

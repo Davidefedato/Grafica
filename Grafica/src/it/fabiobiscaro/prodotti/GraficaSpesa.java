@@ -5,8 +5,13 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
 import javax.swing.ButtonGroup;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Button;
@@ -23,14 +28,14 @@ public class GraficaSpesa {
 	private Text txtDescrizione;
 	private Text txtPrezzo;
 	private Text txtTotale;
+	private Text txtTessera;
+	private Text txtAlimentari;
 	private Double prezzo;
 	private String descrizione;
 	private String codice;
 	private ListaSpesa listaSpesa;
 	private String A;
 	private String B;
-	private Text txtTessera;
-	private Text txtAlimentari;
 	private List list;
 
 	/**
@@ -176,7 +181,40 @@ public class GraficaSpesa {
 		btnSalvaScontrino.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				
+				//listaSpesa.Scrittura();
+				MessageDialog.openInformation(shlLista, "i", "i1");
+				FileOutputStream F = null;
+				try {
+					F = new FileOutputStream("z:\\Scontrino.txt");
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					MessageDialog.openInformation(shlLista, "ERRORE", "E1");
+				}
+				PrintStream scrivi = new PrintStream(F);
+				 for(int i=0;i<2;i++){
+						MessageDialog.openInformation(shlLista, "i", ""+i);
+
+		               Prodotto p = listaSpesa.getProdotto(i);
+		               if (p instanceof Alimentare){
+		            	   scrivi.println("---Alimentare---");
+		            	   scrivi.println(p.getDescrizione());
+		            	   scrivi.println(p.getCodice());
+		            	   scrivi.println(p.getPrezzo());
+		            	   scrivi.println(((Alimentare) p).getScadenza().getGiorno());
+		            	   scrivi.println(((Alimentare) p).getScadenza().getMese());
+		            	   scrivi.println(((Alimentare) p).getScadenza().getAnno());
+		               }
+		               else if (p instanceof NonAlimentare){
+		            	   scrivi.println("---Non Alimentare---");
+		            	   scrivi.println(p.getDescrizione());
+		            	   scrivi.println(p.getCodice());
+		            	   scrivi.println(p.getPrezzo());
+		            	   scrivi.println(((NonAlimentare) p).getMateriale());
+		               }
+		         }
+				 scrivi.close();
+				 
 			}
 		});
 		btnSalvaScontrino.setBounds(61, 314, 114, 25);
