@@ -129,7 +129,7 @@ public class GraficaSpesa {
 							Alimentare a = new Alimentare(codice, descrizione, prezzo, new Data(26, 1, 2016));
 							listaSpesa.aggiungiProdotto(a);
 						} else {
-							NonAlimentare na = new NonAlimentare(codice, descrizione, prezzo, "carta");
+							NonAlimentare na = new NonAlimentare(codice, descrizione, prezzo, "");
 							listaSpesa.aggiungiProdotto(na);
 						}
 						
