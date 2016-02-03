@@ -20,7 +20,7 @@ public class NonAlimentare extends Prodotto {
 	@Override
 	public void applicaSconto() {
 		// TODO Auto-generated method stub
-		if (materiale.equals("carta") || materiale.equals("vetro")) {
+		if (materiale.equalsIgnoreCase("carta") || materiale.equalsIgnoreCase("vetro") || materiale.equalsIgnoreCase("plastica") || materiale.equalsIgnoreCase("legno")) {
 			prezzo = prezzo *0.90;
 		} else {
 			super.applicaSconto();

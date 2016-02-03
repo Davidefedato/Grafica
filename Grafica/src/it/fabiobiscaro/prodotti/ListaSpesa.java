@@ -49,6 +49,14 @@ public class ListaSpesa {
 		return totale;
 	}
 	
+	public void elimina(int pos) throws Exception{
+		if (numProdotti!=0 || pos < maxProdotti){
+			for (int i = pos; i< numProdotti; i++){
+			 lista[i] = lista[i+1];
+			}
+		}
+	}
+	
 	public void Scrittura(){
 		
 	}

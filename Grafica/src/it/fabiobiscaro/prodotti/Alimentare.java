@@ -5,7 +5,7 @@ public class Alimentare extends Prodotto {
 	Data scadenza;
 	
 	public Alimentare(String codice, String descrizione, double prezzo, Data scadenza) {
-		super(codice, descrizione, prezzo); // Chiama il costruttore della classe estesa
+		super(codice, descrizione, prezzo); // Chiama il costruttore della classe estesa	
 		this.scadenza = scadenza; // Imposta il nuovo attributo della classe Alimentare
 	}
 

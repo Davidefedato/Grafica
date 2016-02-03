@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -28,15 +29,17 @@ public class GraficaSpesa {
 	private Text txtDescrizione;
 	private Text txtPrezzo;
 	private Text txtTotale;
-	private Text txtTessera;
 	private Text txtAlimentari;
 	private Double prezzo;
 	private String descrizione;
 	private String codice;
+	private String materiale;
 	private ListaSpesa listaSpesa;
 	private String A;
 	private String B;
 	private List list;
+	private Text txtMateriale;
+	private int scelta;
 
 	/**
 	 * Launch the application.
@@ -74,7 +77,7 @@ public class GraficaSpesa {
 	protected void createContents() {
 		// Creo le variabili che servono a me
 
-		listaSpesa = new ListaSpesa(true);
+		listaSpesa = new ListaSpesa(false);
 
 		//
 		shlLista = new Shell();
@@ -87,7 +90,7 @@ public class GraficaSpesa {
 
 		Label lblCodice = new Label(shlLista, SWT.NONE);
 		lblCodice.setBounds(29, 42, 55, 15);
-		lblCodice.setText("Codice");
+		lblCodice.setText("Codice :");
 
 		txtDescrizione = new Text(shlLista, SWT.BORDER);
 		txtDescrizione.setBounds(137, 86, 76, 21);
@@ -97,19 +100,15 @@ public class GraficaSpesa {
 
 		Label lblDescrizione = new Label(shlLista, SWT.NONE);
 		lblDescrizione.setBounds(29, 89, 71, 15);
-		lblDescrizione.setText("Descrizione");
+		lblDescrizione.setText("Descrizione :");
 
 		Label lblPrezzo = new Label(shlLista, SWT.NONE);
 		lblPrezzo.setBounds(29, 136, 55, 15);
-		lblPrezzo.setText("Prezzo");
-
-		Label lblTessera = new Label(shlLista, SWT.NONE);
-		lblTessera.setBounds(29, 184, 55, 15);
-		lblTessera.setText("Tessera");
+		lblPrezzo.setText("Prezzo : ");
 
 		Label lblAlimentari = new Label(shlLista, SWT.NONE);
-		lblAlimentari.setBounds(29, 230, 55, 15);
-		lblAlimentari.setText("Alimentari");
+		lblAlimentari.setBounds(29, 177, 71, 15);
+		lblAlimentari.setText("Alimentari :");
 
 		Button btnAggiungiP = new Button(shlLista, SWT.NONE);
 		btnAggiungiP.addSelectionListener(new SelectionAdapter() {
@@ -125,11 +124,13 @@ public class GraficaSpesa {
 						prezzo = Double.valueOf(txtPrezzo.getText());
 						descrizione = txtDescrizione.getText();
 						A = txtAlimentari.getText();
-						if (A == "Si") {
+						if (A.equalsIgnoreCase("si")) {
 							Alimentare a = new Alimentare(codice, descrizione, prezzo, new Data(26, 1, 2016));
 							listaSpesa.aggiungiProdotto(a);
 						} else {
-							NonAlimentare na = new NonAlimentare(codice, descrizione, prezzo, "");
+							materiale = txtMateriale.getText();
+							NonAlimentare na = new NonAlimentare(codice, descrizione, prezzo, materiale);
+							
 							listaSpesa.aggiungiProdotto(na);
 						}
 						
@@ -142,8 +143,8 @@ public class GraficaSpesa {
 				// System.out.println(listaSpesa.calcolaTotale());
 			}
 		});
-		btnAggiungiP.setBounds(293, 37, 75, 25);
-		btnAggiungiP.setText("AggiungiP");
+		btnAggiungiP.setBounds(257, 37, 111, 25);
+		btnAggiungiP.setText("Aggiungi prodotto");
 
 		Button btnTotale = new Button(shlLista, SWT.NONE);
 		btnTotale.addSelectionListener(new SelectionAdapter() {
@@ -154,27 +155,24 @@ public class GraficaSpesa {
 				txtTotale.setText(String.valueOf(listaSpesa.calcolaTotale()));
 			}
 		});
-		btnTotale.setBounds(111, 360, 75, 25);
+		btnTotale.setBounds(29, 314, 75, 25);
 		btnTotale.setText("Totale");
 
 		txtTotale = new Text(shlLista, SWT.BORDER);
-		txtTotale.setBounds(266, 362, 76, 21);
+		txtTotale.setBounds(198, 316, 76, 21);
 
 		Label label = new Label(shlLista, SWT.NONE);
-		label.setBounds(205, 365, 55, 15);
+		label.setBounds(137, 319, 55, 15);
 		label.setText(":");
 
 		list = new List(shlLista, SWT.BORDER);
 		list.setBounds(432, 39, 164, 248);
 
-		txtTessera = new Text(shlLista, SWT.BORDER);
-		txtTessera.setBounds(137, 178, 76, 21);
-
 		txtAlimentari = new Text(shlLista, SWT.BORDER);
-		txtAlimentari.setBounds(137, 230, 76, 21);
+		txtAlimentari.setBounds(137, 174, 76, 21);
 		
 		Button btnCaricaScontrino = new Button(shlLista, SWT.NONE);
-		btnCaricaScontrino.setBounds(61, 283, 125, 25);
+		btnCaricaScontrino.setBounds(29, 267, 125, 25);
 		btnCaricaScontrino.setText("Carica scontrino");
 		
 		Button btnSalvaScontrino = new Button(shlLista, SWT.NONE);
@@ -182,7 +180,6 @@ public class GraficaSpesa {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				//listaSpesa.Scrittura();
-				MessageDialog.openInformation(shlLista, "i", "i1");
 				FileOutputStream F = null;
 				try {
 					F = new FileOutputStream("z:\\Scontrino.txt");
@@ -192,33 +189,87 @@ public class GraficaSpesa {
 					MessageDialog.openInformation(shlLista, "ERRORE", "E1");
 				}
 				PrintStream scrivi = new PrintStream(F);
-				 for(int i=0;i<2;i++){
-						MessageDialog.openInformation(shlLista, "i", ""+i);
-
-		               Prodotto p = listaSpesa.getProdotto(i);
+				 for(int i=0;i<20;i++){
+					 Prodotto p = listaSpesa.getProdotto(i);
 		               if (p instanceof Alimentare){
 		            	   scrivi.println("---Alimentare---");
-		            	   scrivi.println(p.getDescrizione());
-		            	   scrivi.println(p.getCodice());
-		            	   scrivi.println(p.getPrezzo());
-		            	   scrivi.println(((Alimentare) p).getScadenza().getGiorno());
-		            	   scrivi.println(((Alimentare) p).getScadenza().getMese());
+		            	   scrivi.println("Descrizione: " + p.getDescrizione());
+		            	   scrivi.println("Codice: " + p.getCodice());
+		            	   scrivi.println("Prezzo: " + p.getPrezzo() + " €");
+		            	   scrivi.print("Data di scadenza: " + ((Alimentare) p).getScadenza().getGiorno() + "/");
+		            	   scrivi.print(((Alimentare) p).getScadenza().getMese() + "/");
 		            	   scrivi.println(((Alimentare) p).getScadenza().getAnno());
+		            	   scrivi.println();
 		               }
 		               else if (p instanceof NonAlimentare){
 		            	   scrivi.println("---Non Alimentare---");
-		            	   scrivi.println(p.getDescrizione());
-		            	   scrivi.println(p.getCodice());
-		            	   scrivi.println(p.getPrezzo());
-		            	   scrivi.println(((NonAlimentare) p).getMateriale());
+		            	   scrivi.println("Descrizione: " + p.getDescrizione());
+		            	   scrivi.println("Codice: " + p.getCodice());
+		            	   scrivi.println("Prezzo: " + p.getPrezzo() + " €");
+		            	   scrivi.println("Materiale: " + ((NonAlimentare) p).getMateriale());
+		            	   scrivi.println();
 		               }
 		         }
 				 scrivi.close();
 				 
 			}
 		});
-		btnSalvaScontrino.setBounds(61, 314, 114, 25);
+		btnSalvaScontrino.setBounds(160, 267, 114, 25);
 		btnSalvaScontrino.setText("Salva scontrino");
+		
+		Label lblsiNo = new Label(shlLista, SWT.NONE);
+		lblsiNo.setBounds(219, 177, 55, 15);
+		lblsiNo.setText("(Si / No)");
+		
+		txtMateriale = new Text(shlLista, SWT.BORDER);
+		txtMateriale.setBounds(137, 216, 76, 21);
+		
+		Label lblMateriale = new Label(shlLista, SWT.NONE);
+		lblMateriale.setBounds(29, 219, 55, 15);
+		lblMateriale.setText("Materiale :");
+		
+		Label lblsoloSeNon = new Label(shlLista, SWT.NONE);
+		lblsoloSeNon.setBounds(219, 219, 164, 15);
+		lblsoloSeNon.setText("(Solo se non alimentare)");
+		
+		Button btnNuovo = new Button(shlLista, SWT.NONE);
+		btnNuovo.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				//Custom button text
+				Object[] options = {"Si, con tessera",
+				                    "Si, senza tessera",
+				                    "Annulla"};
+				scelta = JOptionPane.showOptionDialog(null,
+				    "Vuoi creare un nuovo scontrino? ",
+				    "Nuovo scontrino",
+				    JOptionPane.YES_NO_CANCEL_OPTION,
+				    JOptionPane.QUESTION_MESSAGE,
+				    null,
+				    options,
+				    options[2]);
+				if (scelta == 0){
+					listaSpesa = new ListaSpesa(true);
+				}
+				if (scelta == 1){
+					listaSpesa = new ListaSpesa(false);
+				}
+				
+			}
+		});
+		btnNuovo.setBounds(293, 267, 114, 25);
+		btnNuovo.setText("Nuovo scontrino");
+		
+		Button btnElimina = new Button(shlLista, SWT.NONE);
+		btnElimina.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				
+				
+			}
+		});
+		btnElimina.setBounds(308, 314, 75, 25);
+		btnElimina.setText("Elimina");
 
 	}
 }
