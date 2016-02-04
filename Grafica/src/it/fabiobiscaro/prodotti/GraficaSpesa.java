@@ -5,8 +5,11 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintStream;
 
 import javax.swing.ButtonGroup;
@@ -21,6 +24,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Combo;
+
+import org.eclipse.swt.widgets.FileDialog;
+
+import org.eclipse.jface.dialogs.MessageDialog;
+
+@SuppressWarnings("unused")
 
 public class GraficaSpesa {
 
@@ -138,7 +147,7 @@ public class GraficaSpesa {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					list.add(descrizione);
+					list.add(descrizione + "	  " + prezzo + " €");
 				
 				// System.out.println(listaSpesa.calcolaTotale());
 			}
@@ -172,6 +181,26 @@ public class GraficaSpesa {
 		txtAlimentari.setBounds(137, 174, 76, 21);
 		
 		Button btnCaricaScontrino = new Button(shlLista, SWT.NONE);
+		btnCaricaScontrino.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				try {
+				BufferedReader lettore = new BufferedReader(new FileReader("z:\\Scontrino.txt"));
+				// nb lettore == null (se errore)
+				String riga;
+					riga = lettore.readLine();
+					while (riga != null) {
+						//...
+						System.out.println(riga);
+						riga = lettore.readLine();
+					}
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+			}
+		});
 		btnCaricaScontrino.setBounds(29, 267, 125, 25);
 		btnCaricaScontrino.setText("Carica scontrino");
 		
@@ -265,11 +294,66 @@ public class GraficaSpesa {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				
-				
+				try {
+					listaSpesa.elimina(list.getSelectionIndex());
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				list.remove(list.getSelectionIndex());
+				txtTotale.setText(String.valueOf(listaSpesa.calcolaTotale()));
 			}
 		});
 		btnElimina.setBounds(308, 314, 75, 25);
 		btnElimina.setText("Elimina");
+		
 
+		Button btnApriFile = new Button(shlLista, SWT.NONE);
+			btnApriFile.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					
+					FileDialog fileDialog = new FileDialog(shlLista);
+					fileDialog.setFilterExtensions(new String[]{"*.txt", "*.csv", "*.*"}); //opzionale
+					String fileScelto = fileDialog.open();
+
+					if(fileScelto != null) {
+						MessageDialog.openInformation(shlLista, "File ", fileScelto);
+						MessageDialog.openInformation(shlLista, "File (solo nome)", fileDialog.getFileName());
+					}
+				}
+			});
+			btnApriFile.setBounds(29, 365, 75, 25);
+			btnApriFile.setText("Apri");
+			
+			Button btnInizia = new Button(shlLista, SWT.NONE);
+			btnInizia.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+						//Custom button text
+						Object[] options = {"Si, con tessera",
+						                    "No, senza tessera",
+						                    "Annulla"};
+						scelta = JOptionPane.showOptionDialog(null,
+						    "Hai la tessera? ",
+						    "Tessera",
+						    JOptionPane.YES_NO_CANCEL_OPTION,
+						    JOptionPane.QUESTION_MESSAGE,
+						    null,
+						    options,
+						    options[2]);
+						if (scelta == 0){
+							listaSpesa = new ListaSpesa(true);
+						}
+						if (scelta == 1){
+							listaSpesa = new ListaSpesa(false);
+						}
+						
+					}
+				
+			});
+			btnInizia.setBounds(271, 86, 75, 25);
+			btnInizia.setText("Inizia");
+		}
 	}
-}
+

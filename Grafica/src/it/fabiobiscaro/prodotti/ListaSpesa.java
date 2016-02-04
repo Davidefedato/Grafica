@@ -54,12 +54,16 @@ public class ListaSpesa {
 			for (int i = pos; i< numProdotti; i++){
 			 lista[i] = lista[i+1];
 			}
+			numProdotti--;
 		}
-	}
-	
-	public void Scrittura(){
+		else {
+			throw new Exception ("Errore nell'eliminazione del prodotto!");
+		}
+		
 		
 	}
+	
+	
 
 }
 
