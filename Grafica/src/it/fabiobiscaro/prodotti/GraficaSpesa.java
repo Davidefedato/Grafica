@@ -148,11 +148,17 @@ public class GraficaSpesa {
 						e1.printStackTrace();
 					}
 					list.add(descrizione + "	  " + prezzo + " €");
-				
+					
+					txtCodice.setText(" ");
+					txtDescrizione.setText(" ");
+					txtMateriale.setText(" ");
+					txtPrezzo.setText(" ");
+					txtAlimentari.setText(" ");
+					txtTotale.setText(" ");
 				// System.out.println(listaSpesa.calcolaTotale());
 			}
 		});
-		btnAggiungiP.setBounds(257, 37, 111, 25);
+		btnAggiungiP.setBounds(259, 37, 111, 25);
 		btnAggiungiP.setText("Aggiungi prodotto");
 
 		Button btnTotale = new Button(shlLista, SWT.NONE);
@@ -187,12 +193,75 @@ public class GraficaSpesa {
 				try {
 				BufferedReader lettore = new BufferedReader(new FileReader("z:\\Scontrino.txt"));
 				// nb lettore == null (se errore)
+				String pezzi[] ;
 				String riga;
 					riga = lettore.readLine();
 					while (riga != null) {
 						//...
 						System.out.println(riga);
+						if (riga.equalsIgnoreCase("---Alimentare---")) {
+							riga = lettore.readLine();
+							//System.out.println(riga);
+							pezzi = riga.split(":");
+							String descrizione = pezzi[1];
+							riga = lettore.readLine();
+							//System.out.println(riga);
+							pezzi = riga.split(":");
+							String codice =  pezzi[1];
+							riga = lettore.readLine();
+							//System.out.println(riga);
+							pezzi = riga.split(":");
+							pezzi = pezzi[1].split(" ");
+							Double prezzo = Double.parseDouble(pezzi[1]);
+							riga = lettore.readLine();
+							//System.out.println(riga);
+							pezzi = riga.split(":");
+							String data =  pezzi[1];
+							//System.out.println(data);
+							
+							String[] scadenza = data.split("/");
+							int giorno = Integer.parseInt(scadenza[0].trim());
+							int mese = Integer.parseInt(scadenza[1]);
+							int anno = Integer.parseInt(scadenza[2]);
+							Alimentare a = new Alimentare(codice, descrizione, prezzo, new Data(giorno, mese, anno));
+							try {
+								listaSpesa.aggiungiProdotto(a);
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							list.add(descrizione + "	  " + prezzo + " €");
+							
+						} else {
+							riga = lettore.readLine();
+							//System.out.println(riga);
+							pezzi = riga.split(":");
+							String descrizione = pezzi[1];
+							riga = lettore.readLine();
+							//System.out.println(riga);
+							pezzi = riga.split(":");
+							String codice =  pezzi[1];
+							riga = lettore.readLine();
+							//System.out.println(riga);
+							pezzi = riga.split(":");
+							pezzi = pezzi[1].split(" ");
+							Double prezzo = Double.parseDouble(pezzi[1]);
+							riga = lettore.readLine();
+							//System.out.println(riga);
+							pezzi = riga.split(":");
+							String materiale =  pezzi[1];
+							NonAlimentare na = new NonAlimentare(descrizione, codice, prezzo, materiale);
+							try {
+								listaSpesa.aggiungiProdotto(na);
+							} catch (Exception e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							list.add(descrizione + "	  " + prezzo + " €");
+						}
+						//System.out.println(riga);
 						riga = lettore.readLine();
+						
 					}
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -228,7 +297,6 @@ public class GraficaSpesa {
 		            	   scrivi.print("Data di scadenza: " + ((Alimentare) p).getScadenza().getGiorno() + "/");
 		            	   scrivi.print(((Alimentare) p).getScadenza().getMese() + "/");
 		            	   scrivi.println(((Alimentare) p).getScadenza().getAnno());
-		            	   scrivi.println();
 		               }
 		               else if (p instanceof NonAlimentare){
 		            	   scrivi.println("---Non Alimentare---");
@@ -236,7 +304,6 @@ public class GraficaSpesa {
 		            	   scrivi.println("Codice: " + p.getCodice());
 		            	   scrivi.println("Prezzo: " + p.getPrezzo() + " €");
 		            	   scrivi.println("Materiale: " + ((NonAlimentare) p).getMateriale());
-		            	   scrivi.println();
 		               }
 		         }
 				 scrivi.close();
@@ -265,6 +332,13 @@ public class GraficaSpesa {
 		btnNuovo.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
+				list.removeAll();
+				txtCodice.setText(" ");
+				txtDescrizione.setText(" ");
+				txtMateriale.setText(" ");
+				txtPrezzo.setText(" ");
+				txtAlimentari.setText(" ");
+				txtTotale.setText(" ");
 				//Custom button text
 				Object[] options = {"Si, con tessera",
 				                    "Si, senza tessera",
@@ -283,7 +357,6 @@ public class GraficaSpesa {
 				if (scelta == 1){
 					listaSpesa = new ListaSpesa(false);
 				}
-				
 			}
 		});
 		btnNuovo.setBounds(293, 267, 114, 25);
@@ -352,8 +425,12 @@ public class GraficaSpesa {
 					}
 				
 			});
-			btnInizia.setBounds(271, 86, 75, 25);
+			btnInizia.setBounds(332, 5, 75, 25);
 			btnInizia.setText("Inizia");
+			
+			Label lblPerIniziareLo = new Label(shlLista, SWT.NONE);
+			lblPerIniziareLo.setBounds(86, 10, 235, 15);
+			lblPerIniziareLo.setText("PER INIZIARE LO SCONTRINO PREMI QUI");
 		}
 	}
 
